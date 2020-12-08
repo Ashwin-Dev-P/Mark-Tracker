@@ -13,7 +13,7 @@
     <main>
         <form method="post" action="signUp">
             {% csrf_token %} 
-            <label for="first_name">Full Name</label>
+            <label for="first_name">First Name</label>
             <input type="text" name="first_name" id="first_name" /><br/>
 
             <label for="last_name">Last name</label>
@@ -21,6 +21,9 @@
 
             <label for="username">User Name</label>
             <input type="text" name="username" id="username" /><br/>
+
+            <label for="email">email</label>
+            <input type="email" name="email" id="email" /><br/>
 
             <label for="password1">Password</label>
             <input type="password" name='password1' id='password1' /><br/>
@@ -31,6 +34,9 @@
             <input type="submit" name="submit" id="submit">
 
         </form>
+        {% for message in messages%}
+        {{message}}
+        {% endfor %}
     </main>
 
     <footer>

@@ -20,6 +20,9 @@
             
             <button type="submit"/>Log In</button>
         </form>
+        {% for message in messages %}
+            {{message}}
+        {% endfor %}
     </main>
     <footer>
             <nav>

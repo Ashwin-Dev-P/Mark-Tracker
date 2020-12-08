@@ -3,7 +3,7 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="#">Home</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="logOut">Log Out</a></li>
                     
@@ -17,13 +17,49 @@
         Hello {{user}}
     </header>
     <main>
-        main page
-        <a href="add">Add</a>
+        <a href="add">Add</a><br/>
+        <table border="1">
+        <tr>
+            <th>
+                No.
+            </th>
+            
+            <th>
+                Semester
+            </th>
+            <th>
+                Subject
+            </th>
+            <th>
+                Marks
+            </th>
+        </tr>
+        {% for datum in data %}
+        <tr>
+            <td>
+                {{forloop.counter}}
+            </td>
+            <td>
+            {{datum.semester}}
+            </td>
+            <td>
+                {{datum.subject_name}}
+            </td>
+            <td>
+                {{datum.marks}}
+            </td>
+        </tr>
+        {% endfor %}
+        </table>
+
+        {% for message in messages%}
+            {{message}}
+        {% endfor %}
     </main>
     <footer>
             <nav>
                 <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="#">Home</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="logOut">Log Out</a></li>
                 

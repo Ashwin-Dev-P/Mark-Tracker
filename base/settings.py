@@ -81,7 +81,8 @@ DATABASES = {
         'NAME': 'MarkTracker',
         'USER':'postgres',
         'PASSWORD':'14062001aaadp',
-        'HOST':"localhost"
+        'HOST':"localhost",
+        'PORT':'5432'
     }
 }
 

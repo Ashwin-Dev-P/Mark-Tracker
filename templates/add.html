@@ -3,7 +3,8 @@
     <header>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="main">Home</a></li>
+
                 {% if user.is_authenticated %}
                     <li><a href="logOut">Log Out</a></li>
                     
@@ -33,7 +34,7 @@
     <footer>
             <nav>
                 <ul>
-                <li><a href="/">Home</a></li>
+                <li><a href="main">Home</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="logOut">Log Out</a></li>
                 
