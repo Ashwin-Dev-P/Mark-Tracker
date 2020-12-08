@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block content %}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="logOut">Log Out</a></li>
+                    
+                {% else %}
+                    <li><a href="signUp">Sign Up</a></li>
+                    <li><a href="logIn">Log In</a></li>
+            
+                {% endif %}
+            </ul>
+        </nav>
+        Hello {{user}}
+    </header>
+    <main>
+        <form method="post" action="add">
+            {% csrf_token %}
+            <label for="Department">Department</label>
+            <input type="text" name="Department" id="Department" /><br/>
+            <label for="semester">Semester</label>
+            <input type="number" name="semester" id="semester" /><br/>
+            <label for="subject_name">Subject</label>
+            <input type="text" name="subject_name" id="subject_name" /><br/>
+            <label for="marks">Marks</label>
+            <input type="number" name="marks" id="marks" /><br/>
+            <button type="submit" name="add" id="add" />Add</button>
+        </form>
+    </main>
+    <footer>
+            <nav>
+                <ul>
+                <li><a href="/">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="logOut">Log Out</a></li>
+                
+                {% else %}
+                    <li><a href="signUp">Sign Up</a></li>
+                    <li><a href="logIn">Log In</a></li>
+                {% endif %}
+                 </ul>
+            </nav>
+    </footer>
+{% endblock %}

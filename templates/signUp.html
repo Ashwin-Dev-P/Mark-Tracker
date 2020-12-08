@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                    <li><a href="logIn">Log In</a></li>
+                
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <form method="post" action="signUp">
+            {% csrf_token %} 
+            <label for="first_name">Full Name</label>
+            <input type="text" name="first_name" id="first_name" /><br/>
+
+            <label for="last_name">Last name</label>
+            <input type="text" name="last_name" id="last_name" /><br/>
+
+            <label for="username">User Name</label>
+            <input type="text" name="username" id="username" /><br/>
+
+            <label for="password1">Password</label>
+            <input type="password" name='password1' id='password1' /><br/>
+
+            <label for="password2">Confirm Password</label>
+            <input type="password" name='password2' id='password2' /><br/>
+
+            <input type="submit" name="submit" id="submit">
+
+        </form>
+    </main>
+
+    <footer>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="#">Sign Up</a></li>
+                    <li><a href="logIn">Log In</a></li>
+                </ul>
+            </nav>
+    </footer>
+{% endblock %}

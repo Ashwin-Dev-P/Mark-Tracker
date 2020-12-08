@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                {% if not user.is_authenticated%}
+                <li><a href="signUp">Sign Up</a></li>
+                <li><a href="logIn">Log In</a></li>
+                {% else %}
+                <li><a href="logOut">Log Out</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    Welcome to the home page.
+    <a href="main">Enter</a>
+
+    <footer>
+            <nav>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    {% if not user.is_authenticated %}
+                    <li><a href="signUp">Sign Up</a></li>
+                    <li><a href="logIn">Log In</a></li>
+                    {% else %}
+                    <li><a href="logOut">Log Out</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+    </footer>
+{% endblock %}
