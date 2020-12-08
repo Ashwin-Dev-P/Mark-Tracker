@@ -3,15 +3,10 @@
     <header>
         <nav>
             <ul>
-                <li><a href="#">Home</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="logOut">Log Out</a></li>
-                    
-                {% else %}
-                    <li><a href="signUp">Sign Up</a></li>
-                    <li><a href="logIn">Log In</a></li>
-            
-                {% endif %}
+                <li><a href="main">Home</a></li>
+                <li><a href="profile">My Profile</a></li>
+                <li><a href="logOut">Log Out</a></li>
+                
             </ul>
         </nav>
         Hello {{user}}
@@ -57,18 +52,7 @@
         {% endfor %}
     </main>
     <footer>
-            <nav>
-                <ul>
-                <li><a href="#">Home</a></li>
-                {% if user.is_authenticated %}
-                    <li><a href="logOut">Log Out</a></li>
-                
-                {% else %}
-                    <li><a href="signUp">Sign Up</a></li>
-                    <li><a href="logIn">Log In</a></li>
-                {% endif %}
-                 </ul>
-            </nav>
+        <a href="#">Home</a>
     </footer>
 
 {% endblock %}

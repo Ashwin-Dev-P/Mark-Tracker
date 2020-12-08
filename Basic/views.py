@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import auth,User
 from Basic.models import markDetails
 from django.contrib import messages
-
+from Basic.forms import UserForms,MarkForms
 # Create your views here.
 def index(request):
     return render(request,'index.html',{'title':'MarkTracker'})
@@ -49,6 +49,7 @@ def logIn(request):
             auth.login(request,user)
             return redirect('main')
         else:
+            messages.success(request,'Invalid credentials.')
             return render(request,"logIn.html",{'title':'login'})
 def main(request):
     if(request.user.is_authenticated):
@@ -79,6 +80,28 @@ def add(request):
         instance.save()
         print('Mark details are added.')
         return redirect('main')
+def profile(request):
+    if(request.method == "GET"):
+        details = User.objects.get(id=request.user.id)
+        return render(request,"profile.html",{'title':'Profile','details':details})
+    elif(request.method == "POST"):
+        update = User.objects.get(id=request.user.id)
+        form = UserForms(request.POST,instance=update)
+        if(form.is_valid()):
+            form.save()
+            messages.success(request,"Record Updated")
+            print("Record Updated.")
+            return redirect('profile')
+        else:
+            messages.error(request,"Form is invalid.")
+            return redirect('profile')
+        
+        
+        return render(request,"profile.html",{'title':'Profile'})
+
+
+    
+        
 
 
 

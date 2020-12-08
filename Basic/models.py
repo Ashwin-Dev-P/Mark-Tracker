@@ -9,3 +9,6 @@ class markDetails(models.Model):
     Department = models.CharField(max_length = 100)
     subject_name = models.CharField(max_length=100)
     marks = models.IntegerField()
+
+class Departments(models.Model):
+    name = models.CharField(max_length=100)
