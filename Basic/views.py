@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import auth,User
-from Basic.models import markDetails
+from Basic.models import markDetails,Departments
 from django.contrib import messages
 from Basic.forms import UserForms,MarkForms
 # Create your views here.
@@ -59,9 +59,7 @@ def main(request):
         messages.info(request,"Login to continue.")
         #return render(request,"login,html")
         return redirect('login')
-def logOut(request):
-    auth.logout(request)
-    return redirect('/')
+
 
 def add(request):
     if(request.method == 'GET'):
@@ -81,12 +79,20 @@ def add(request):
         print('Mark details are added.')
         return redirect('main')
 def profile(request):
+    departments = Departments.objects.all()
     if(request.method == "GET"):
+        
+        if(request.user.id is None):
+            messages.error(request,"Login to continue.")
+            return redirect('login')
+        
         details = User.objects.get(id=request.user.id)
-        return render(request,"profile.html",{'title':'Profile','details':details})
+        return render(request,"profile.html",{'title':'Profile','details':details,'departments':departments})
     elif(request.method == "POST"):
         update = User.objects.get(id=request.user.id)
         form = UserForms(request.POST,instance=update)
+
+
         if(form.is_valid()):
             form.save()
             messages.success(request,"Record Updated")
@@ -98,6 +104,29 @@ def profile(request):
         
         
         return render(request,"profile.html",{'title':'Profile'})
+
+def additionalInfo(request):
+    if(request.method == "POST"):
+        department = request.POST['department']
+
+        if(not Departments.objects.filter(name=department).exists()):
+            departmentToBeAdded = Departments(name=department)
+            departmentToBeAdded.save()
+        
+
+        messages.success(request,"Department updated.")
+        print("Department updated.")
+    else:
+        messages.error(request,"additionalInfo page cannot be accessed.")
+    return redirect('profile')
+    
+def myInfo(request):
+    return render(request,'myInfo.html',{'title':'My Info'})
+
+
+def logOut(request):
+    auth.logout(request)
+    return redirect('/')
 
 
     

@@ -1,10 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <header>
         <nav>
             <ul>
                 <li><a href="main">Home</a></li>
                 <li><a href="profile">My Profile</a></li>
+                <li><a href="myInfo">My Info</a></li>
                 <li><a href="logOut">Log Out</a></li>
                 
             </ul>
@@ -35,38 +37,12 @@
         
         {% endfor %}
 
-        <h2>Additional Info</h2>
-        <form action="additionalInfo" method="post">
-            {% csrf_token %}
-            <label for="Department">Department</label>
-            <select name="Department" id="Department" required>
-                <option value='' >None</option>
-                <option value="1">Computer Science</option>
-                <option value="2">Mechanical</option>
-                <option value="3">Information technology</option>
-                <option value="4">EEE</option>
-                <option value="5">ECE</option>
-                <option value="6">Civil</option>
-            </select><br>
-
-            <label for="semester">Semester</label>
-            <select name="semester" id="semester" required>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
-            </select>
-
-
-        </form>
+        
 
 
     </main>
     
     <footer>
     </footer>
+    <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}
