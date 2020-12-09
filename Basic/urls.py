@@ -11,5 +11,6 @@ urlpatterns=[
     path('profile',views.profile,name="profile"),
     path('additionalInfo',views.additionalInfo,name="additionalInfo"),
     path('myInfo',views.myInfo,name="myInfo"),
+    path('edit',views.edit,name="edit"),
 
 ]

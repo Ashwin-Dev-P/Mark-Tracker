@@ -1,5 +1,5 @@
 from django import forms
-from Basic.models import User,markDetails
+from Basic.models import User,markDetails,additionalInfo
 
 class UserForms(forms.ModelForm):
     class Meta:
@@ -10,3 +10,4 @@ class MarkForms(forms.ModelForm):
     class Meta:
         model = markDetails
         fields = "__all__"
+

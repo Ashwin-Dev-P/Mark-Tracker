@@ -14,24 +14,30 @@
         Hello {{user}}
     </header>
     <main>
-        <h1>Profile</h1>
-        <form method="post" action="profile">
-            {% csrf_token %} 
-            <label for="first_name">First Name</label>
-            <input type="text" name="first_name" id="first_name" value="{{details.first_name}}" ><br>
-
-            <label for="last_name">Last name</label>
-            <input type="text" name="last_name" id="last_name" value="{{details.last_name}}"><br/>
-
-            <label for="username">User Name</label>
-            <input type="text" name="username" id="username" value="{{details.username}}"><br/>
-
-            <label for="email">email</label>
-            <input type="email" name="email" id="email" value="{{details.email}}"><br/>
-
-            <button type="submit" name="update" id="update">update</button>
-
-        </form>
+        <div>
+            <table border=2>
+            <tr>
+            <td>First Name</td><td>{{details.first_name}}</td>
+            </tr>
+            <tr>
+            <td>Last Name</td><td> {{details.last_name}}</td>
+            </tr>
+            <tr>
+            <td>User Name</td><td>{{details.username}}</td>
+            </tr>
+            <tr>
+            <td>Email</td><td>{{details.email}}</td>
+            </tr>
+            <tr>
+            <td>Department</td> <td></td>
+            </tr>
+            <tr>
+            <td>Semester</td><td> </td>
+            </tr>
+            </table>
+            <a href="edit">Edit</a>
+        </div>
+        
         {% for message in messages%}
         <span class="{{message.tags}}">{{message}}</span>
         

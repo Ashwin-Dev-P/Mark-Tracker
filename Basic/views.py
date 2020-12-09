@@ -113,6 +113,7 @@ def additionalInfo(request):
             departmentToBeAdded = Departments(name=department)
             departmentToBeAdded.save()
         
+        
 
         messages.success(request,"Department updated.")
         print("Department updated.")
@@ -122,6 +123,14 @@ def additionalInfo(request):
     
 def myInfo(request):
     return render(request,'myInfo.html',{'title':'My Info'})
+def edit(request):
+    if(not request.user.is_authenticated):
+        messages.error(request,"Login to continue.")
+        return redirect('login')
+    else:
+        if(request.method == "GET"):
+            details = User.objects.get(id=request.user.id)
+            return render(request,"edit.html",{'title':'edit','details':details})
 
 
 def logOut(request):
