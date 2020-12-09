@@ -4,6 +4,7 @@
         <nav>
             <ul>
                 <li><a href="main">Home</a></li>
+                <li><a href="profile">My Profile</a></li>
                 <li><a href="logOut">Log Out</a></li>
                 
             </ul>
@@ -13,28 +14,22 @@
     <main>
         <form method="post" action="add">
             {% csrf_token %}
-            <label for="Department">Department</label>
-            <input type="text" name="Department" id="Department" /><br/>
 
-            <!--
-            <label for="semester">Semester</label>
-            <input type="number" name="semester" id="semester" min="1" max="8"/><br/>
-            -->
+           
             <label for="semester" id="semester" >Semester</label>
             <select name="semester" id="semester">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-                <option value="6">6</option>
-                <option value="7">7</option>
-                <option value="8">8</option>
+                {% for i in '12345678'|make_list %}
+                    
+                    <option value="{{i}}" >{{i}}</option>
+                    
+                {% endfor %}
+                
             </select>
             <br>
 
             <label for="subject_name">Subject</label>
             <input type="text" name="subject_name" id="subject_name" /><br/>
+            
             <label for="marks">Marks</label>
             <input type="number" name="marks" id="marks" min="0" max="100"><br/>
             <button type="submit" name="add" id="add" />Add</button>

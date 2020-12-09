@@ -10,4 +10,9 @@ class MarkForms(forms.ModelForm):
     class Meta:
         model = markDetails
         fields = "__all__"
+class infoForms(forms.ModelForm):
+    class Meta:
+        model = additionalInfo
+        fields = "__all__"
+
 

@@ -5,7 +5,6 @@
             <ul>
                 <li><a href="main">Home</a></li>
                 <li><a href="profile">My Profile</a></li>
-                <li><a href="myInfo">My Info</a></li>
                 <li><a href="logOut">Log Out</a></li>
                 
             </ul>
@@ -13,9 +12,12 @@
         Hello {{user}}
     </header>
     <main>
+        {% for message in messages %}
+            {{message}}
+        {% endfor %}
         <div>
             <h1>Profile</h1>
-            <form method="post" action="profile">
+            <form method="post" action="edit">
                 {% csrf_token %} 
                 <label for="first_name">First Name</label>
                 <input type="text" name="first_name" id="first_name" value="{{details.first_name}}" ><br>
@@ -30,27 +32,22 @@
                 <input type="email" name="email" id="email" value="{{details.email}}"><br/>
 
                 <button type="submit" name="update" id="update">update</button>
-
+<!---->
             </form>
             <h1>Additional Info</h1>
             <form action="additionalInfo" method="post">
-                {% csrf_token %}
+                {% csrf_token %}<!---->
                 <label for="Department" >Department</label>
-                
-
-                <input type="text" list="DepartmentList" id="Department" name="department" />
+                <input type="text" list="DepartmentList" id="department" name="Department_id" />
                 <datalist id="DepartmentList">
                     {% for department in departments%}
-                        <option>{{department.name}}</option>
+                        <option value="{{department.id}}">
                     {% endfor %}
                 </datalist>
-
-                
-
                 <br>
 
                 <label for="semester">Semester</label>
-                <select name="semester" id="semester" required>
+                <select name="current_semester_id" id="semester" required>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -61,6 +58,7 @@
                     <option value="8">8</option>
                 </select>
                 <br>
+                <input type="number" name="user_id" value="{{request.user.id}}">
                 <button type="submit">Submit</button>
 
             </form>

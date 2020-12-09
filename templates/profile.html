@@ -6,7 +6,6 @@
             <ul>
                 <li><a href="main">Home</a></li>
                 <li><a href="profile">My Profile</a></li>
-                <li><a href="myInfo">My Info</a></li>
                 <li><a href="logOut">Log Out</a></li>
                 
             </ul>
@@ -29,10 +28,10 @@
             <td>Email</td><td>{{details.email}}</td>
             </tr>
             <tr>
-            <td>Department</td> <td></td>
+            <td>Department</td> <td>{{department_name}}</td>
             </tr>
             <tr>
-            <td>Semester</td><td> </td>
+            <td>Semester</td><td>{{additionalinfo.current_semester_id}} </td>
             </tr>
             </table>
             <a href="edit">Edit</a>
@@ -43,7 +42,7 @@
         
         {% endfor %}
 
-        
+   
 
 
     </main>
