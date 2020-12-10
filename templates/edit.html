@@ -35,19 +35,19 @@
 <!---->
             </form>
             <h1>Additional Info</h1>
-            <form action="additionalInfo" method="post">
+            <form action="additionalInfo" method="post" enctype= multipart/form-data>
                 {% csrf_token %}<!---->
                 <label for="Department" >Department</label>
-                <input type="text" list="DepartmentList" id="department" name="Department_id" />
+                <input type="text" list="DepartmentList" id="Department" name="Department" required autocomplete="off">
                 <datalist id="DepartmentList">
                     {% for department in departments%}
-                        <option value="{{department.id}}">
+                        <option value="{{department.id}}">{{department.name}}</option>
                     {% endfor %}
                 </datalist>
                 <br>
 
                 <label for="semester">Semester</label>
-                <select name="current_semester_id" id="semester" required>
+                <select name="current_semester" id="semester" required>
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
@@ -58,7 +58,7 @@
                     <option value="8">8</option>
                 </select>
                 <br>
-                <input type="number" name="user_id" value="{{request.user.id}}">
+                <input type="number" name="user" value="{{request.user.id}}" required hidden>
                 <button type="submit">Submit</button>
 
             </form>

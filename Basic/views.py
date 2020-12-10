@@ -97,28 +97,39 @@ def profile(request):
 
 def additionalInfoFunction(request):
     if(request.method == "POST"):
-        department = request.POST['Department_id']
-        sem = request.POST['current_semester_id']
-        if(not Departments.objects.filter(name=department).exists()):
+        
+        department = request.POST['Department']
+        
+        sem = request.POST['current_semester']
+        isstr = isinstance(department, str)
+        if(isstr or not Departments.objects.filter(id=department).exists()):
             departmentToBeAdded = Departments(name=department)
             departmentToBeAdded.save()
-        #otherInfo = additionalInfo.objects.get(id=request.user.id)
-        if(additionalInfo.objects.filter(id=request.user.id).exists()):
-            additionalInfoUpdate = additionalInfo.objects.get(user_id=request.user.id)
+            messages.info(request,"New department added")
+            department_id = Departments.objects.filter(name=department).first()
+            post = request.POST.copy()
+            post['Department'] = department_id.id
+            request.POST = post
+            print(post['Department'],request.POST['Department'])
+
+        
+        
+        if( additionalInfo.objects.filter(id=request.user.id).exists()):
+            additionalInfoUpdate = additionalInfo.objects.filter(id=request.user.id).first()
             if(additionalInfoUpdate is None):
                 messages.error(request,"No additional info is found for the user.")
-
                 return redirect("edit")
-            print("dept id=",additionalInfoUpdate.Department_id)
+            
             infoForm = infoForms(request.POST,instance=additionalInfoUpdate)
 
             if(infoForm.is_valid()):
                 infoForm.save()
-                message.success(request,"Department and semester updated.")
+                messages.success(request,"Department and semester updated.")
                 print("Dept and sem success")
                 return redirect('profile')
             else:
                 #printf.errors
+                print(infoForm.errors)
                 messages.error(request,"Department and semester is not updated.")
                 return redirect("edit")
         else:
@@ -161,8 +172,8 @@ def edit(request):
 
             
             #Additional info form.
-            department = request.POST['Department_id']
-            sem = request.POST['current_semester_id']            
+            department = request.POST['Department']
+            sem = request.POST['current_semester']            
             if(not Departments.objects.filter(name=department).exists()):
                 departmentToBeAdded = Departments(name=department)
                 departmentToBeAdded.save()
