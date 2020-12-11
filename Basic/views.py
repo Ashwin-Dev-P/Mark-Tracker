@@ -101,16 +101,16 @@ def additionalInfoFunction(request):
         department = request.POST['Department']
         
         sem = request.POST['current_semester']
-        isstr = isinstance(department, str)
-        if(isstr or not Departments.objects.filter(id=department).exists()):
+        #isstr = isinstance(department, str)
+        if( not Departments.objects.filter(name=department).exists()):
             departmentToBeAdded = Departments(name=department)
             departmentToBeAdded.save()
             messages.info(request,"New department added")
-            department_id = Departments.objects.filter(name=department).first()
-            post = request.POST.copy()
-            post['Department'] = department_id.id
-            request.POST = post
-            print(post['Department'],request.POST['Department'])
+        department_id = Departments.objects.filter(name=department).first()
+        post = request.POST.copy()
+        post['Department'] = department_id.id
+        request.POST = post
+        print(post['Department'],request.POST['Department'])
 
         
         
@@ -170,48 +170,65 @@ def edit(request):
                 messages.error(request,"Form is invalid.")
                 return redirect('edit')
 
-            
-            #Additional info form.
+
             department = request.POST['Department']
-            sem = request.POST['current_semester']            
-            if(not Departments.objects.filter(name=department).exists()):
+        
+            sem = request.POST['current_semester']
+        
+            if( not Departments.objects.filter(name=department).exists()):
                 departmentToBeAdded = Departments(name=department)
                 departmentToBeAdded.save()
-                #otherInfo = additionalInfo.objects.get(id=request.user.id)
-            if(additionalInfo.objects.filter(user_id=request.user.id).exists()):
+                messages.info(request,"New department added")
+            department_id = Departments.objects.filter(name=department).first()
+            post = request.POST.copy()
+            post['Department'] = department_id.id
+            request.POST = post
+            print(post['Department'],request.POST['Department'])
 
-                additionalInfoUpdate = additionalInfo.objects.get(user_id=request.user.id)
+        
+        
+            if( additionalInfo.objects.filter(id=request.user.id).exists()):
+                additionalInfoUpdate = additionalInfo.objects.filter(id=request.user.id).first()
                 if(additionalInfoUpdate is None):
                     messages.error(request,"No additional info is found for the user.")
-
                     return redirect("edit")
-                print("dept id=",additionalInfoUpdate.Department_id)
+                
                 infoForm = infoForms(request.POST,instance=additionalInfoUpdate)
 
                 if(infoForm.is_valid()):
                     infoForm.save()
-                    message.success(request,"Department and semester updated.")
+                    messages.success(request,"Department and semester updated.")
                     print("Dept and sem success")
                     return redirect('profile')
                 else:
                     #printf.errors
+                    print(infoForm.errors)
                     messages.error(request,"Department and semester is not updated.")
                     return redirect("edit")
             else:
                 department_object= Departments.objects.get(name=department)
                 #return render(request,"edit.html",{'obj':department_object})
 
-            otherInfo = additionalInfo(Department_id=department_object.id,current_semester_id=sem,user_id=request.user.id)
-            otherInfo.save()
+                otherInfo = additionalInfo(Department_id=department_object.id,current_semester_id=sem,user_id=request.user.id)
+                otherInfo.save()
             messages.success(request,"Department updated.")
             print("Department updated.")
-            
+        else:
+            messages.error(request,"additionalInfo page cannot be accessed.")
+        return redirect('profile')
 
             
-       
+
+
+            
+            
+            
+
+           
         
-        return render(request,"profile.html",{'title':'Profile'})
-        return render(request,"edit.html",{'title':'edit','details':details})
+        
+        #return redirect('profile')
+        
 
 
 def logOut(request):

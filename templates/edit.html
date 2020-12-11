@@ -34,14 +34,14 @@
                 <button type="submit" name="update" id="update">update</button>
 <!---->
             </form>
-            <h1>Additional Info</h1>
+            <!--<h1>Additional Info</h1>
             <form action="additionalInfo" method="post" enctype= multipart/form-data>
-                {% csrf_token %}<!---->
+                {% csrf_token %}-->
                 <label for="Department" >Department</label>
                 <input type="text" list="DepartmentList" id="Department" name="Department" required autocomplete="off">
                 <datalist id="DepartmentList">
                     {% for department in departments%}
-                        <option value="{{department.id}}">{{department.name}}</option>
+                        <option value="{{department.name}}"></option>
                     {% endfor %}
                 </datalist>
                 <br>
