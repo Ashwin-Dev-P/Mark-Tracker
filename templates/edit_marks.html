@@ -1,0 +1,24 @@
+{% extends 'base.html' %} 
+{% block content %}
+    <form method="post" action="">
+        {% csrf_token %} 
+        <input type="text" value="{{mark_details.subject_name}}" name="subject_name" required><br>
+        <input type="number" min=0 max=100 value="{{mark_details.marks}}" name="marks" required><br>
+        <label for="semester">Semester</label>
+        <select name="semester" id="semester" required>
+            {% for i in semesters %}
+                {% if i == mark_details.semester %}
+                    <option value="{{i}}" selected>{{i}}</option>
+                {% else %}
+                    <option value="{{i}}">{{i}}</option>
+                {% endif %}
+            {% endfor %}
+        </select> <br>
+        <input type="number" required hidden value="{{request.user.id}}" name="user" value="user_id">
+        <button type="submit">Update</button>
+    </form>
+    {% for message in messages %}
+        {{messages}}
+    {% endfor %}
+    
+{% endblock %}

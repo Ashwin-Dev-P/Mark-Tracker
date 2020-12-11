@@ -31,35 +31,31 @@
                 <label for="email">email</label>
                 <input type="email" name="email" id="email" value="{{details.email}}"><br/>
 
-                <button type="submit" name="update" id="update">update</button>
-<!---->
-            </form>
-            <!--<h1>Additional Info</h1>
-            <form action="additionalInfo" method="post" enctype= multipart/form-data>
-                {% csrf_token %}-->
                 <label for="Department" >Department</label>
-                <input type="text" list="DepartmentList" id="Department" name="Department" required autocomplete="off">
+                
+                <input  type="text" list="DepartmentList" value="{{department_name}}" id="Department" name="Department" required autocomplete="off">
                 <datalist id="DepartmentList">
                     {% for department in departments%}
                         <option value="{{department.name}}"></option>
                     {% endfor %}
                 </datalist>
                 <br>
-
+                
                 <label for="semester">Semester</label>
                 <select name="current_semester" id="semester" required>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
+                    {% for i in semesters %}
+                        {% if i == current_semester %}
+                            <option value="{{i}}" selected>{{i}}</option>
+                        {% else %}
+                            <option value="{{i}}">{{i}}</option>
+                        {% endif %}
+                    {% endfor %}
+                    
                 </select>
                 <br>
-                <input type="number" name="user" value="{{request.user.id}}" required hidden>
-                <button type="submit">Submit</button>
+
+                <input type="number" name="user" value="{{request.user.id}}" required hidden autocomplete="off">
+                <button type="submit">Update</button>
 
             </form>
         </div>

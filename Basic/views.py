@@ -4,6 +4,7 @@ from Basic.models import markDetails,Departments,additionalInfo
 from django.contrib import messages
 from Basic.forms import UserForms,MarkForms,infoForms
 from django.http import HttpResponse
+from django.urls import reverse
 
 # Create your views here.
 def index(request):
@@ -62,6 +63,48 @@ def main(request):
         messages.error(request,"Login to continue.")
         return redirect('login')
 
+def delete(request,id):
+    dataToBeDeleted = markDetails.objects.get(id=id)
+    dataToBeDeleted.delete()
+    return redirect('main')
+
+def edit_marks(request,id):
+    if(request.method == "GET"):
+        markDetailsToBeEdited = markDetails.objects.get(id=id)
+        semesters = range(1,9)
+        
+        return render(request,"edit_marks.html",{'mark_details':markDetailsToBeEdited,'semesters':semesters})
+    if(request.method == "POST"):
+        
+        dataToBeEdited = markDetails.objects.get(id=id)
+        form = MarkForms(request.POST,instance=dataToBeEdited)
+        if(form.is_valid()):
+            form.save()
+            messages.success(request,'Marks updated.')
+            
+        else:
+            messages.error(request,"Invalid form data.")
+        return redirect('main')
+    else:
+        messages.error(request,"Only get method request will be handled.")
+        return render(request,"NotFound")
+
+def edit_marks_post(request,id):
+    if(request.method == "POST"):
+        dataToBeEdited = markDetails.objects.get(id=id)
+        form = MarkForms(request.POST,instance=dataToBeEdited)
+        if(forms.is_valid()):
+            form.save()
+            messages.success('Marks updated.')
+            return redirect('main')
+        else:
+            messages.error(request,"Inform form data.")
+            return redirect("edit_marks")
+    else:
+        messages.error(request,"Only post methods will be handled.")
+        return redirect("edit_marks.html")
+    
+
 
 def add(request):
     if(request.method == 'GET'):
@@ -80,7 +123,7 @@ def add(request):
         return redirect('main')
 
 def profile(request):
-    #departments = Departments.objects.all()
+    
     if(request.method == "GET"):
         
         if(request.user.id is None):
@@ -91,59 +134,12 @@ def profile(request):
         additionalInfoObjects = additionalInfo.objects.get(id=request.user.id)
         department_object = Departments.objects.get(id=additionalInfoObjects.Department_id)
         department_name = department_object.name
+        
         return render(request,"profile.html",{'title':'Profile','details':details,'additionalinfo':additionalInfoObjects,'department_name':department_name})
     else:
         return HttpResponse("Only Post and Get request will be handled.")
 
-def additionalInfoFunction(request):
-    if(request.method == "POST"):
-        
-        department = request.POST['Department']
-        
-        sem = request.POST['current_semester']
-        #isstr = isinstance(department, str)
-        if( not Departments.objects.filter(name=department).exists()):
-            departmentToBeAdded = Departments(name=department)
-            departmentToBeAdded.save()
-            messages.info(request,"New department added")
-        department_id = Departments.objects.filter(name=department).first()
-        post = request.POST.copy()
-        post['Department'] = department_id.id
-        request.POST = post
-        print(post['Department'],request.POST['Department'])
 
-        
-        
-        if( additionalInfo.objects.filter(id=request.user.id).exists()):
-            additionalInfoUpdate = additionalInfo.objects.filter(id=request.user.id).first()
-            if(additionalInfoUpdate is None):
-                messages.error(request,"No additional info is found for the user.")
-                return redirect("edit")
-            
-            infoForm = infoForms(request.POST,instance=additionalInfoUpdate)
-
-            if(infoForm.is_valid()):
-                infoForm.save()
-                messages.success(request,"Department and semester updated.")
-                print("Dept and sem success")
-                return redirect('profile')
-            else:
-                #printf.errors
-                print(infoForm.errors)
-                messages.error(request,"Department and semester is not updated.")
-                return redirect("edit")
-        else:
-            department_object= Departments.objects.get(name=department)
-            #return render(request,"edit.html",{'obj':department_object})
-
-            otherInfo = additionalInfo(Department_id=department_object.id,current_semester_id=sem,user_id=request.user.id)
-            otherInfo.save()
-        messages.success(request,"Department updated.")
-        print("Department updated.")
-    else:
-        messages.error(request,"additionalInfo page cannot be accessed.")
-    return redirect('profile')
-    
 
 
 def edit(request):
@@ -153,9 +149,15 @@ def edit(request):
     else:
         if(request.method == "GET"):
             details = User.objects.get(id=request.user.id)
+            additionalInfoObjects = additionalInfo.objects.get(id=request.user.id)
             departments = Departments.objects.all()
+            department_object = Departments.objects.get(id=additionalInfoObjects.Department_id)
+            department_name = department_object.name
 
-            return render(request,"edit.html",{'title':'edit','details':details,'departments':departments})
+            current_sem = additionalInfoObjects.current_semester_id
+            semesters = range(1,9)
+            print("Department name:",department_name)
+            return render(request,"edit.html",{'title':'edit','details':details,'departments':departments,'department_name':department_name,"current_semester":current_sem,"semesters":semesters})
         elif(request.method == "POST"):
 
             #User details form.
@@ -165,15 +167,14 @@ def edit(request):
                 form.save()
                 messages.success(request,"Record Updated")
                 print("Record profile Updated.")
-                #return redirect('profile')
+                
             else:
                 messages.error(request,"Form is invalid.")
                 return redirect('edit')
 
 
-            department = request.POST['Department']
-        
-            sem = request.POST['current_semester']
+            department = request.POST.get('Department',"Computer Science")
+            sem = request.POST.get('current_semester',"4")
         
             if( not Departments.objects.filter(name=department).exists()):
                 departmentToBeAdded = Departments(name=department)
@@ -214,38 +215,11 @@ def edit(request):
             messages.success(request,"Department updated.")
             print("Department updated.")
         else:
-            messages.error(request,"additionalInfo page cannot be accessed.")
+            messages.error(request,"This request method cannot be accessed.")
+            return redirect("NotFound")
         return redirect('profile')
-
-            
-
-
-            
-            
-            
-
-           
-        
-        
-        #return redirect('profile')
-        
-
-
+def notFound(request):
+    return render(request,"NotFound.html",{'title':'Not Found'})
 def logOut(request):
     auth.logout(request)
     return redirect('/')
-
-
-    
-        
-
-
-
-
-
-
-
-
-
-
-

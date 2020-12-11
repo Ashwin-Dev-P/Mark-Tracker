@@ -9,7 +9,11 @@ urlpatterns=[
     path('logOut',views.logOut,name="logout"),
     path('add',views.add,name="add"),
     path('profile',views.profile,name="profile"),
-    path('additionalInfo',views.additionalInfoFunction,name="additionalInfo"),
     path('edit',views.edit,name="edit"),
+    path('notFound',views.notFound,name="Not Found"),
+    path('delete/<int:id>',views.delete,name="delete"),
+    path('edit_marks/<int:id>',views.edit_marks,name="edit_marks"),
+    
+    
 
 ]

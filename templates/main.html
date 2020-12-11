@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <header>
         <nav>
@@ -12,6 +13,11 @@
         Hello {{user}}
     </header>
     <main>
+    <script>
+    function confirmation(){
+    document.getElementById('confirmation').innerHtml="Are you sure you want to delete the record?Yes/No";
+}
+</script>
         <a href="add">Add</a><br/>
         <table border="1">
         <tr>
@@ -28,6 +34,9 @@
             <th>
                 Marks
             </th>
+            <th>
+                Action
+            </th>
         </tr>
         {% for datum in data %}
         <tr>
@@ -43,10 +52,16 @@
             <td>
                 {{datum.marks}}
             </td>
+            <td>
+                <span  onclick="confirmation({{datum.id}});">delete</span>/<a href="edit_marks/{{datum.id}}">edit</a>
+            </td>
         </tr>
         {% endfor %}
         </table>
+        
+        <div id="confirmation">
 
+        </div>
         {% for message in messages%}
             {{message}}
         {% endfor %}
@@ -54,5 +69,6 @@
     <footer>
         <a href="#">Home</a>
     </footer>
+    <script src="{% static 'js/index.js' %}"></script>
 
 {% endblock %}
