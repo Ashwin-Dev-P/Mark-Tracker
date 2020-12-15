@@ -21,3 +21,6 @@ class additionalInfo(models.Model):
     Department = models.ForeignKey(Departments,default=None,on_delete=models.CASCADE)
     current_semester = models.ForeignKey(semester,default=None,validators=[MaxValueValidator(101)],on_delete=models.CASCADE)
     privacy = models.PositiveSmallIntegerField(default=0,validators = [MaxValueValidator(1)]);
+
+class subjects(models.Model):
+    name = models.CharField(max_length=100)

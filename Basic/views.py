@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import auth,User
-from Basic.models import markDetails,Departments,additionalInfo
+from Basic.models import markDetails,Departments,additionalInfo,subjects
 from django.contrib import messages
 from Basic.forms import UserForms,MarkForms,infoForms
 from django.http import HttpResponse
@@ -171,20 +171,31 @@ def edit_marks(request,id):
         return render(request,"NotFound")
 
 def add(request):
-    if(request.method == 'GET'):
-        if(request.user.is_authenticated):
-            return render(request,"add.html",{'title':'Add'})
+    if(request.user.is_authenticated):
+        if(request.method == 'GET'):
+            subjects_array = subjects.objects.all()
+            additional_info = additionalInfo.objects.get(user_id=request.user.id)
+            semesters = range(1,9)
+            return render(request,"add.html",{'title':'Add','subjects':subjects_array,'semesters':semesters,'additionalInfo':additional_info})
+        elif(request.method == "POST"):
+            semester = request.POST['semester']
+            subject_name = request.POST['subject_name']
+            marks = request.POST['marks']
+            mark_details = markDetails(semester=semester,subject_name=subject_name,marks=marks,user_id=request.user.id)
+            mark_details.save()
+            messages.success(request,"Marks added.")
+
+            if( not subjects.objects.filter(name=subject_name).exists() ):
+                subject_to_be_added = subjects(name=subject_name)
+                subject_to_be_added.save()
+                messages.info(request,"Subject name added.")
+            return redirect('main')
         else:
-            messages.error(request,"login to continue.")
-            return redirect("login")
-    elif(request.method == "POST"):
-        semester = request.POST['semester']
-        subject_name = request.POST['subject_name']
-        marks = request.POST['marks']
-        mark_details = markDetails(semester=semester,subject_name=subject_name,marks=marks,user_id=request.user.id)
-        mark_details.save()
-        messages.success(request,"Marks added.")
-        return redirect('main')
+            messages.error(request,"Only Get and post requests will be handled.")
+            return redirect('main')
+    else:
+        messages.error(request,"login to continue.")
+        return redirect("login")
 
 def profile(request):
     

@@ -18,17 +18,24 @@
            
             <label for="semester" id="semester" >Semester</label>
             <select name="semester" id="semester">
-                {% for i in '12345678'|make_list %}
-                    
-                    <option value="{{i}}" >{{i}}</option>
-                    
+                {% for i in semesters %}
+                    {% if i == additionalInfo.current_semester_id %}
+                        <option value="{{i}}" selected>{{i}}</option>
+                    {% else %}
+                        <option value="{{i}}">{{i}}</option>
+                    {% endif %}
                 {% endfor %}
                 
             </select>
             <br>
 
             <label for="subject_name">Subject</label>
-            <input type="text" name="subject_name" id="subject_name" /><br/>
+            <input type="text" list="subject_names" name="subject_name" id="subject_name" autocomplete="off" /><br/>
+            <datalist id="subject_names">
+                {% for subject in subjects %}
+                    <option value="{{subject.name}}">{{subject.name}}</option>
+                {% endfor %}
+            </datalist>
             
             <label for="marks">Marks</label>
             <input type="number" name="marks" id="marks" min="0" max="100"><br/>
