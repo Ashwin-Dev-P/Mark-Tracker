@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block content %}
+    
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">My Profile</a></li>
+                <li><a href="{% url 'students' %}">Other Students</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+                
+            </ul>
+        </nav>
+        Hello {{user}}
+    </header>
+    <main>
+        <h1>Students</h1>
+        <div>
+            <p>Note:Only public accounts will be visible.</p>
+        </div>
+        {%for message in messages %}
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+
+        {% if not empty %}
+            <table border=2 >
+                <tr>
+                    <th>S.No</th>
+                    <th>Name</th>
+                    <th>Department</th>
+                    <th>Current Semester</th>
+                </tr>
+                {% for student in students  %}
+                    <tr>
+                        <td>
+                            {{forloop.counter}}
+                        </td>
+                        <td>
+                            {{student.name}}
+                        </td>
+                        <td>
+                            {{student.department }}
+                        </td>
+                        <td>
+                            {{student.current_semester}}
+                        </td>
+                    </tr>
+                {% endfor %}         
+                
+            </table>
+        {% endif %}
+
+        
+
+
+
+
+
+    </main>
+    <footer>
+    </footer>
+
+
+{% endblock %}

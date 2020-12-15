@@ -81,14 +81,46 @@ def main(request):
         messages.error(request,"Login to continue.")
         return redirect('login')
 
+def students(request):
+    if(request.user.is_authenticated):
+        if(request.method == "GET"):
+            if( additionalInfo.objects.filter(privacy=1).exists() ):
+                students = additionalInfo.objects.filter(privacy=1)
+                #print(len(students))
+                if(len(students) < 1 ):
+                    empty = 1
+                else:
+                    empty = 0
+
+                id_to_value_converted_list = []
+                for student in students:
+                    name = User.objects.get(id=student.user_id).username
+                    department = Departments.objects.get(id=student.Department_id).name
+                    this_student = {'name':name,'department':department,'current_semester':student.current_semester_id}
+                    id_to_value_converted_list.append(this_student)
+
+
+                return render(request,"students.html",{'title':'Students','students':id_to_value_converted_list,'empty':empty})
+            else:
+                messages.info(request,"No public accounts found.")
+                return render(request,"students.html",{'title':'Students'})
+        else:
+            messages.error(request,"Only Get request will be handled.")
+    else:
+        messages.error(request,"Login to continue")
+        return redirect('login')
+
 def rank(request,department_id,semester,subject_name):
     if(request.user.is_authenticated):
         if(request.method == "GET"):  
+
+            """
+            Note:This feauture allows only pubic account to watch other accounts such as in linkedin.So i isabled this.
             additionalinfo = additionalInfo.objects.get(user_id=request.user.id)  
             if(additionalinfo.privacy == 0):
                 messages.error(request,"Enable privacy to public to rank yourself among other students.")
                 return redirect('main')
-
+            """
 
             flag = 0
             #TO delete: subject_name = subject_name
