@@ -1,21 +1,36 @@
 {% extends 'base.html' %}
 {% block content %}
     <header>
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                {% if not user.is_authenticated%}
-                <li><a href="signUp">Sign Up</a></li>
-                <li><a href="logIn">Log In</a></li>
-                {% else %}
-                <li><a href="logOut">Log Out</a></li>
-                {% endif %}
-            </ul>
-        </nav>
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    {% if not user.is_authenticated%}
+                    <li><a href="signUp">Sign Up</a></li>
+                    <li><a href="logIn">Log In</a></li>
+                    {% else %}
+                    <li><a href="logOut">Log Out</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
     </header>
-
-    Welcome to the Website.
-    <a href="main">Enter</a>
+    <main>
+        <div>
+            <div>
+                <ul>
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %} >{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                Welcome to the MarkTracker.
+                <a href="{% url 'main' %}">Enter</a>
+            </div>
+        </div>
+    </main>
+    
 
     <footer>
         <a href="#">Home</a>

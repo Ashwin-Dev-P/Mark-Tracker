@@ -15,6 +15,7 @@ urlpatterns=[
     path('edit_marks/<int:id>',views.edit_marks,name="edit_marks"),
     path('rank/<int:department_id>/<int:semester>/<str:subject_name>',views.rank,name="rank"),
     path('students',views.students,name="students"),
+    path('detailedInfo/<int:id>',views.detailedInfo,name="detailedInfo"),
     
     
 

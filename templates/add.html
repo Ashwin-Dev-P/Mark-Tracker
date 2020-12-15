@@ -1,46 +1,60 @@
 {% extends 'base.html' %}
 {% block content %}
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'main' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">My Profile</a></li>
-                <li><a href="{% url 'logout' %}">Log Out</a></li>
-                
-            </ul>
-        </nav>
-        Hello {{user}}
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'main' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'students' %}">Other Students</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    
+                </ul>
+            </nav>
+            Hello {{user}}
+        </div>
     </header>
     <main>
-        <form method="post" action="add">
-            {% csrf_token %}
+        <div>
+            <div>
+                <ul>
+                    {% for message in messages %}
+                        <li {% if(message.tags) %} class="{{message.tags}}" {% endif %}>{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <form method="post" action="add">
+                    {% csrf_token %}
 
-           
-            <label for="semester" id="semester" >Semester</label>
-            <select name="semester" id="semester">
-                {% for i in semesters %}
-                    {% if i == additionalInfo.current_semester_id %}
-                        <option value="{{i}}" selected>{{i}}</option>
-                    {% else %}
-                        <option value="{{i}}">{{i}}</option>
-                    {% endif %}
-                {% endfor %}
                 
-            </select>
-            <br>
+                    <label for="semester" id="semester" >Semester</label>
+                    <select name="semester" id="semester">
+                        {% for i in semesters %}
+                            {% if i == additionalInfo.current_semester_id %}
+                                <option value="{{i}}" selected>{{i}}</option>
+                            {% else %}
+                                <option value="{{i}}">{{i}}</option>
+                            {% endif %}
+                        {% endfor %}
+                        
+                    </select>
+                    <br>
 
-            <label for="subject_name">Subject</label>
-            <input type="text" list="subject_names" name="subject_name" id="subject_name" autocomplete="off" /><br/>
-            <datalist id="subject_names">
-                {% for subject in subjects %}
-                    <option value="{{subject.name}}">{{subject.name}}</option>
-                {% endfor %}
-            </datalist>
-            
-            <label for="marks">Marks</label>
-            <input type="number" name="marks" id="marks" min="0" max="100"><br/>
-            <button type="submit" name="add" id="add" />Add</button>
-        </form>
+                    <label for="subject_name">Subject</label>
+                    <input type="text" list="subject_names" name="subject_name" id="subject_name" autocomplete="off" /><br/>
+                    <datalist id="subject_names">
+                        {% for subject in subjects %}
+                            <option value="{{subject.name}}">{{subject.name}}</option>
+                        {% endfor %}
+                    </datalist>
+                    
+                    <label for="marks">Marks</label>
+                    <input type="number" name="marks" id="marks" min="0" max="100"><br/>
+                    <button type="submit" name="add" id="add" />Add</button>
+                </form>
+            </div>
+        </div>
     </main>
     <footer>
             

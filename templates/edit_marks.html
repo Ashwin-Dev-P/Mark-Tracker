@@ -1,37 +1,48 @@
 {% extends 'base.html' %} 
 {% block content %}
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'main' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">My Profile</a></li>
-                <li><a href="{% url 'logout' %}">Log Out</a></li>
-                
-            </ul>
-        </nav>
-        Hello {{user}}
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'main' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'students' %}">Other Students</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    
+                </ul>
+            </nav>
+            Hello {{user}}
+        </div>
     </header>
     <main>
-        <form method="post" action="">
-            {% csrf_token %} 
-            <input type="text" value="{{mark_details.subject_name}}" name="subject_name" required><br>
-            <input type="number" min=0 max=100 value="{{mark_details.marks}}" name="marks" required><br>
-            <label for="semester">Semester</label>
-            <select name="semester" id="semester" required>
-                {% for i in semesters %}
-                    {% if i == mark_details.semester %}
-                        <option value="{{i}}" selected>{{i}}</option>
-                    {% else %}
-                        <option value="{{i}}">{{i}}</option>
-                    {% endif %}
-                {% endfor %}
-            </select> <br>
-            <input type="number" required hidden value="{{request.user.id}}" name="user" value="user_id">
-            <button type="submit">Update</button>
-        </form>
-        {% for message in messages %}
-            {{messages}}
-        {% endfor %}
+        <div>
+            <div>
+                <ul>
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %} >{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <form method="post" action="">
+                    {% csrf_token %} 
+                    <input type="text" value="{{mark_details.subject_name}}" name="subject_name" required><br>
+                    <input type="number" min=0 max=100 value="{{mark_details.marks}}" name="marks" required><br>
+                    <label for="semester">Semester</label>
+                    <select name="semester" id="semester" required>
+                        {% for i in semesters %}
+                            {% if i == mark_details.semester %}
+                                <option value="{{i}}" selected>{{i}}</option>
+                            {% else %}
+                                <option value="{{i}}">{{i}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select> <br>
+                    <input type="number" required hidden value="{{request.user.id}}" name="user" value="user_id">
+                    <button type="submit">Update</button>
+                </form>
+            </div>
+        </div>
     </main>
     <footer>
     </footer>

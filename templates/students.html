@@ -1,63 +1,77 @@
 {% extends 'base.html' %}
 {% block content %}
-    
+
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'main' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">My Profile</a></li>
-                <li><a href="{% url 'students' %}">Other Students</a></li>
-                <li><a href="{% url 'logout' %}">Log Out</a></li>
-                
-            </ul>
-        </nav>
-        Hello {{user}}
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'main' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'students' %}">Other Students</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    
+                </ul>
+            </nav>
+            Hello {{user}}
+            <h1>Students</h1>
+        </div>
     </header>
     <main>
-        <h1>Students</h1>
         <div>
-            <p>Note:Only public accounts will be visible.</p>
-        </div>
-        {%for message in messages %}
-            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
+        
 
-        {% if not empty %}
-            <table border=2 >
-                <tr>
-                    <th>S.No</th>
-                    <th>Name</th>
-                    <th>Department</th>
-                    <th>Current Semester</th>
-                </tr>
-                {% for student in students  %}
-                    <tr>
-                        <td>
-                            {{forloop.counter}}
-                        </td>
-                        <td>
-                            {{student.name}}
-                        </td>
-                        <td>
-                            {{student.department }}
-                        </td>
-                        <td>
-                            {{student.current_semester}}
-                        </td>
-                    </tr>
-                {% endfor %}         
-                
-            </table>
-        {% endif %}
+            <div>
+                <ul>
+                    {%for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div>
+                <p>Note:Only public accounts will be visible.</p>
+            </div>
+            <div>
+        
+
+                {% if not empty %}
+                    <table border=2 >
+                        <tr>
+                            <th>S.No</th>
+                            <th>Name</th>
+                            <th>Department</th>
+                            <th>Current Semester</th>
+                        </tr>
+                        {% for student in students  %}
+                            <tr>
+                                <td>
+                                    {{forloop.counter}}
+                                </td>
+                                <td>
+                                    <a href="detailedInfo/{{student.id}}">{{student.name}}</a>
+                                </td>
+                                <td>
+                                    {{student.department }}
+                                </td>
+                                <td>
+                                    {{student.current_semester}}
+                                </td>
+                            </tr>
+                        {% endfor %}         
+                        
+                    </table>
+                {% endif %}
 
         
 
 
 
-
-
+            </div>
+        </div>
     </main>
     <footer>
+        <div>
+        </div>
     </footer>
 
 

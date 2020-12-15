@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+    <header>
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'main' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'students' %}">Other Students</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    
+                </ul>
+            </nav>
+            Hello {{user}}
+        </div>
+    </header>
+    <main>
+        <div>
+            <h1>{{username}}</h1>
+            <div>
+                <ul>
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %} >{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                {% if not empty %}
+                    <table border="2">
+                        <tr>
+                            <th>S.No.</th>
+                            <th>Semester</th>
+                            <th>Subject</th>
+                            <th>Marks</th>
+                        </tr>
+                        {% for datum in markData %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{datum.semester}}</td>
+                                <td>{{datum.subject_name}}</td>
+                                <td>{{datum.marks}}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% endif %}
+
+            </div>
+
+
+
+        </div>
+    </main>
+    <footer>
+    </footer>
+
+
+{% endblock %}

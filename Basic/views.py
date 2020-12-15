@@ -96,7 +96,7 @@ def students(request):
                 for student in students:
                     name = User.objects.get(id=student.user_id).username
                     department = Departments.objects.get(id=student.Department_id).name
-                    this_student = {'name':name,'department':department,'current_semester':student.current_semester_id}
+                    this_student = {'id':student.user_id,'name':name,'department':department,'current_semester':student.current_semester_id}
                     id_to_value_converted_list.append(this_student)
 
 
@@ -109,6 +109,38 @@ def students(request):
     else:
         messages.error(request,"Login to continue")
         return redirect('login')
+
+def detailedInfo(request,id):
+    if(request.user.is_authenticated):
+        if(request.method == "GET"):
+            if( additionalInfo.objects.filter(user_id=id).exists() ):
+                if(additionalInfo.objects.filter(user_id=id).first().privacy == 0 ):
+                    messages.error(request,"The account you are trying to access is private.")
+                    return redirect("students")
+                else:
+                    if( markDetails.objects.filter(user_id=id).exists()):
+                        markData = markDetails.objects.filter(user_id=id)
+                    else:
+                        messages.error(request,"No mark details available for this user.")
+                        markData = []
+                    if(len(markData) < 1):
+                        empty = 1
+                    else:
+                        empty = 0
+                    username = User.objects.get(id=id).username
+                    return render(request,"detailedInfo.html",{'title':'detailedInfo','markData':markData,'username':username,'empty':empty})
+            else:
+                messages.error(request,"User account does not exist.")
+                return redirect('students')
+
+            
+        else:
+            messages.error(request,"Only Get request will be handled.")
+            return redirect('detailedInfo')
+    else:
+        messages.error(request,"Login to continue")
+        return redirect('login')
+
 
 def rank(request,department_id,semester,subject_name):
     if(request.user.is_authenticated):

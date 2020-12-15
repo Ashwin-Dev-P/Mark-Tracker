@@ -2,56 +2,66 @@
 {% load static %}
 {% block content %}
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'main' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">My Profile</a></li>
-                <li><a href="{% url 'logout' %}">Log Out</a></li>
-                
-            </ul>
-        </nav>
-        Hello {{user}}
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'main' %}">Home</a></li>
+                    <li><a href="{% url 'students' %}">Other Students</a></li>
+                    <li><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    
+                </ul>
+            </nav>
+            Hello {{user}}
+        </div>
     </header>
     <main>
         <div>
-            <table border=2>
-            <tr>
-            <td>First Name</td><td>{{details.first_name}}</td>
-            </tr>
-            <tr>
-            <td>Last Name</td><td> {{details.last_name}}</td>
-            </tr>
-            <tr>
-            <td>User Name</td><td>{{details.username}}</td>
-            </tr>
-            <tr>
-            <td>Email</td><td>{{details.email}}</td>
-            </tr>
-            <tr>
-            <td>Department</td> <td>{{department_name}}</td>
-            </tr>
-            <tr>
-            <td>Semester</td><td>{{current_semester}} </td>
-            </tr>
-            <tr>
-                <td>Account Privacy</td><td>{{privacy}}</td>
-            </tr>
-            
-            </table>
-            <a href="edit">Edit</a>
-        </div>
+            <div>
+                <ul>
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %} >{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div>
+                <table border=2>
+                <tr>
+                <td>First Name</td><td>{{details.first_name}}</td>
+                </tr>
+                <tr>
+                <td>Last Name</td><td> {{details.last_name}}</td>
+                </tr>
+                <tr>
+                <td>User Name</td><td>{{details.username}}</td>
+                </tr>
+                <tr>
+                <td>Email</td><td>{{details.email}}</td>
+                </tr>
+                <tr>
+                <td>Department</td> <td>{{department_name}}</td>
+                </tr>
+                <tr>
+                <td>Semester</td><td>{{current_semester}} </td>
+                </tr>
+                <tr>
+                    <td>Account Privacy</td><td>{{privacy}}</td>
+                </tr>
+                
+                </table>
+                <a href="edit">Edit</a>
+            </div>
         
-        {% for message in messages%}
-        <span class="{{message.tags}}">{{message}}</span>
-        
-        {% endfor %}
+       
 
    
 
-
+        </div>
     </main>
     
     <footer>
+        <div>
+        </div>
     </footer>
     <script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

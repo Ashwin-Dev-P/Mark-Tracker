@@ -2,75 +2,84 @@
 {% load static %}
 {% block content %}
     <header>
-        <nav>
-            <ul>
-                <li><a href="{% url 'main' %}">Home</a></li>
-                <li><a href="{% url 'profile' %}">My Profile</a></li>
-                <li><a href="{% url 'students' %}">Other Students</a></li>
-                <li><a href="{% url 'logout' %}">Log Out</a></li>
-                
-            </ul>
-        </nav>
-        Hello {{user}}
+        <div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'main' %}">Home</a></li>
+                    <li><a href="{% url 'profile' %}">My Profile</a></li>
+                    <li><a href="{% url 'students' %}">Other Students</a></li>
+                    <li><a href="{% url 'logout' %}">Log Out</a></li>
+                    
+                </ul>
+            </nav>
+            Hello {{user}}
+        </div>
     </header>
     <main>
-    
-        <a href="add">Add</a><br/>
-        <div id="confirmation">
+        <div>
+            <div>
+                <ul>
+                    {% for message in messages %}
+                        <li {% if message.tags %} class="{{message.tags}}" {% endif %} >{{message}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <a href="add">Add</a><br/>
+            <div id="confirmation">
 
+            </div>
+            <div>
+                {% if data_present  %}
+
+                    <table border="1">
+                    <tr>
+                        <th>
+                            No.
+                        </th>
+                        
+                        <th>
+                            Semester
+                        </th>
+                        <th>
+                            Subject
+                        </th>
+                        <th>
+                            Marks
+                        </th>
+                        <th>
+                            Action
+                        </th>
+                    </tr>
+                    {% for datum in data %}
+                    <tr>
+                        <td>
+                            {{forloop.counter}}
+                        </td>
+                        <td>
+                            {{datum.semester}}
+                        </td>
+                        <td>
+                            <a href="rank/{{department_id}}/{{datum.semester}}/{{datum.subject_name}}">{{datum.subject_name}}
+                        </td>
+                        <td>
+                            {{datum.marks}}
+                        </td>
+                        <td>
+                            <span  onclick="confirmation({{datum.id}});">delete</span>/<a href="edit_marks/{{datum.id}}">edit</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </table>
+                {% else %}
+                    Enter your first marks to start.Click the add button.
+                {% endif %}
+            </div>
         </div>
-
-        {% if data_present  %}
-
-            <table border="1">
-            <tr>
-                <th>
-                    No.
-                </th>
-                
-                <th>
-                    Semester
-                </th>
-                <th>
-                    Subject
-                </th>
-                <th>
-                    Marks
-                </th>
-                <th>
-                    Action
-                </th>
-            </tr>
-            {% for datum in data %}
-            <tr>
-                <td>
-                    {{forloop.counter}}
-                </td>
-                <td>
-                    {{datum.semester}}
-                </td>
-                <td>
-                    <a href="rank/{{department_id}}/{{datum.semester}}/{{datum.subject_name}}">{{datum.subject_name}}
-                </td>
-                <td>
-                    {{datum.marks}}
-                </td>
-                <td>
-                    <span  onclick="confirmation({{datum.id}});">delete</span>/<a href="edit_marks/{{datum.id}}">edit</a>
-                </td>
-            </tr>
-            {% endfor %}
-            </table>
-        {% else %}
-            Enter your first marks to start.Click the add button.
-        {% endif %}
-        
-        {% for message in messages%}
-            {{message}}
-        {% endfor %}
     </main>
     <footer>
-        <a href="#">Home</a>
+        <div>
+            <a href="#">Home</a>
+        </div>
     </footer>
     <script src="{% static 'js/index.js' %}"></script>
 
