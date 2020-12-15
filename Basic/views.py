@@ -58,7 +58,12 @@ def logIn(request):
 def main(request):
     if(request.user.is_authenticated):
         data = markDetails.objects.filter(user_id=request.user.id)
-        return render(request,"main.html",{'title':'main','data':data})
+        if(markDetails.objects.filter(user_id=request.user.id).exists()):
+
+            data_present = 1;
+        else:
+            data_present = 0;
+        return render(request,"main.html",{'title':'main','data':data,'data_present':data_present})
     else:
         messages.error(request,"Login to continue.")
         return redirect('login')
@@ -131,11 +136,24 @@ def profile(request):
             return redirect('login')
         
         details = User.objects.get(id=request.user.id)
-        additionalInfoObjects = additionalInfo.objects.get(id=request.user.id)
-        department_object = Departments.objects.get(id=additionalInfoObjects.Department_id)
-        department_name = department_object.name
+
+        if(additionalInfo.objects.filter(user_id=request.user.id).exists()):
+            additionalInfoObjects = additionalInfo.objects.filter(user_id=request.user.id).first()
+            department_object = Departments.objects.get(id=additionalInfoObjects.Department_id)
+            department_name = department_object.name
+            current_semester = additionalInfoObjects.current_semester_id
+            if(additionalInfoObjects.privacy == 0):
+                privacy = "Private"
+            else:
+                privacy = "Public"
+        else:
+            department_name = "";
+            privacy = "Private";
+            current_semester = 1;
+
         
-        return render(request,"profile.html",{'title':'Profile','details':details,'additionalinfo':additionalInfoObjects,'department_name':department_name})
+        
+        return render(request,"profile.html",{'title':'Profile','details':details,'current_semester':current_semester,'department_name':department_name,'privacy':privacy})
     else:
         return HttpResponse("Only Post and Get request will be handled.")
 
@@ -149,15 +167,22 @@ def edit(request):
     else:
         if(request.method == "GET"):
             details = User.objects.get(id=request.user.id)
-            additionalInfoObjects = additionalInfo.objects.get(id=request.user.id)
             departments = Departments.objects.all()
-            department_object = Departments.objects.get(id=additionalInfoObjects.Department_id)
-            department_name = department_object.name
 
-            current_sem = additionalInfoObjects.current_semester_id
+            if(additionalInfo.objects.filter(user_id = request.user.id).exists()):
+                additionalInfoObjects = additionalInfo.objects.filter(user_id=request.user.id).first()
+                department_object = Departments.objects.get(id=additionalInfoObjects.Department_id)
+                department_name = department_object.name
+                current_sem = additionalInfoObjects.current_semester_id
+                privacy = additionalInfoObjects.privacy
+            else:
+                department_name = "";
+                current_sem = 1;
+                privacy = 0;
+            
             semesters = range(1,9)
-            print("Department name:",department_name)
-            return render(request,"edit.html",{'title':'edit','details':details,'departments':departments,'department_name':department_name,"current_semester":current_sem,"semesters":semesters})
+            #print("Department name:",department_name)
+            return render(request,"edit.html",{'title':'edit','details':details,'departments':departments,'department_name':department_name,"current_semester":current_sem,"semesters":semesters,'privacy':privacy})
         elif(request.method == "POST"):
 
             #User details form.
@@ -188,8 +213,8 @@ def edit(request):
 
         
         
-            if( additionalInfo.objects.filter(id=request.user.id).exists()):
-                additionalInfoUpdate = additionalInfo.objects.filter(id=request.user.id).first()
+            if( additionalInfo.objects.filter(user_id=request.user.id).exists()):
+                additionalInfoUpdate = additionalInfo.objects.filter(user_id=request.user.id).first()
                 if(additionalInfoUpdate is None):
                     messages.error(request,"No additional info is found for the user.")
                     return redirect("edit")

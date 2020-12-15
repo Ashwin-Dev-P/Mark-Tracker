@@ -3,9 +3,9 @@
     <header>
         <nav>
             <ul>
-                <li><a href="main">Home</a></li>
-                <li><a href="profile">My Profile</a></li>
-                <li><a href="logOut">Log Out</a></li>
+                <li><a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">My Profile</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
                 
             </ul>
         </nav>
@@ -53,6 +53,20 @@
                     
                 </select>
                 <br>
+                
+                <label for="account_type">Account Privacy</label>
+                <select id="account_type" name="privacy">
+                
+                    {% if privacy == 0 %}
+                        <option value="0" seleted>Private</option>
+                        <option value="1">Public</option>
+                    {% else %}
+                        <option value="0">Private</option>
+                        <option value="1" selected>Public</option>
+                    {% endif %}
+                    
+
+                </select><br>
 
                 <input type="number" name="user" value="{{request.user.id}}" required hidden autocomplete="off">
                 <button type="submit">Update</button>

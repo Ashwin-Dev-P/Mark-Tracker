@@ -4,64 +4,66 @@
     <header>
         <nav>
             <ul>
-                <li><a href="main">Home</a></li>
-                <li><a href="profile">My Profile</a></li>
-                <li><a href="logOut">Log Out</a></li>
+                <li><a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">My Profile</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
                 
             </ul>
         </nav>
         Hello {{user}}
     </header>
     <main>
-    <script>
-    function confirmation(){
-    document.getElementById('confirmation').innerHtml="Are you sure you want to delete the record?Yes/No";
-}
-</script>
+    
         <a href="add">Add</a><br/>
-        <table border="1">
-        <tr>
-            <th>
-                No.
-            </th>
-            
-            <th>
-                Semester
-            </th>
-            <th>
-                Subject
-            </th>
-            <th>
-                Marks
-            </th>
-            <th>
-                Action
-            </th>
-        </tr>
-        {% for datum in data %}
-        <tr>
-            <td>
-                {{forloop.counter}}
-            </td>
-            <td>
-            {{datum.semester}}
-            </td>
-            <td>
-                {{datum.subject_name}}
-            </td>
-            <td>
-                {{datum.marks}}
-            </td>
-            <td>
-                <span  onclick="confirmation({{datum.id}});">delete</span>/<a href="edit_marks/{{datum.id}}">edit</a>
-            </td>
-        </tr>
-        {% endfor %}
-        </table>
-        
         <div id="confirmation">
 
         </div>
+
+        {% if data_present  %}
+
+            <table border="1">
+            <tr>
+                <th>
+                    No.
+                </th>
+                
+                <th>
+                    Semester
+                </th>
+                <th>
+                    Subject
+                </th>
+                <th>
+                    Marks
+                </th>
+                <th>
+                    Action
+                </th>
+            </tr>
+            {% for datum in data %}
+            <tr>
+                <td>
+                    {{forloop.counter}}
+                </td>
+                <td>
+                {{datum.semester}}
+                </td>
+                <td>
+                    {{datum.subject_name}}
+                </td>
+                <td>
+                    {{datum.marks}}
+                </td>
+                <td>
+                    <span  onclick="confirmation({{datum.id}});">delete</span>/<a href="edit_marks/{{datum.id}}">edit</a>
+                </td>
+            </tr>
+            {% endfor %}
+            </table>
+        {% else %}
+            Enter your first marks to start.Click the add button.
+        {% endif %}
+        
         {% for message in messages%}
             {{message}}
         {% endfor %}

@@ -4,9 +4,9 @@
     <header>
         <nav>
             <ul>
-                <li><a href="main">Home</a></li>
-                <li><a href="profile">My Profile</a></li>
-                <li><a href="logOut">Log Out</a></li>
+                <li><a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">My Profile</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
                 
             </ul>
         </nav>
@@ -31,8 +31,12 @@
             <td>Department</td> <td>{{department_name}}</td>
             </tr>
             <tr>
-            <td>Semester</td><td>{{additionalinfo.current_semester_id}} </td>
+            <td>Semester</td><td>{{current_semester}} </td>
             </tr>
+            <tr>
+                <td>Account Privacy</td><td>{{privacy}}</td>
+            </tr>
+            
             </table>
             <a href="edit">Edit</a>
         </div>
