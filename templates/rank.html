@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{% url 'main' %}">Home</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+                <li><a href="{% url 'logout' %}">Log Out</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% for message in messages %}
+            {{message}}
+        {% endfor %}
+        <h1>{{subject_name}}</h1>
+        
+        <table border="2" >
+            <tr>
+                <th>S.No</th>
+                <th>Name</th>
+                <th>Marks</th>
+            </tr>
+        {% for i in data %}
+            <tr>
+                <td>{{forloop.counter }}</td>
+                <td>{{i.username}}</td>
+                <td>{{i.marks}}</td>
+            
+            
+            </tr>
+        {% endfor %}
+        </table>
+
+    </main>
+    <footer>
+        <ul>
+            <li><a href="#">Home</a></li>
+        </ul>
+    </footer>
+
+{% endblock %}

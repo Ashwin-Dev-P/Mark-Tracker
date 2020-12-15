@@ -57,13 +57,89 @@ def logIn(request):
 
 def main(request):
     if(request.user.is_authenticated):
-        data = markDetails.objects.filter(user_id=request.user.id)
-        if(markDetails.objects.filter(user_id=request.user.id).exists()):
-
-            data_present = 1;
+        
+        if( additionalInfo.objects.filter(user_id=request.user.id).exists()):
+            additionalinfo = additionalInfo.objects.get(user_id=request.user.id)
+            department_id = additionalinfo.Department_id
+            if(markDetails.objects.filter(user_id=request.user.id).exists()):
+                data = markDetails.objects.filter(user_id=request.user.id)
+                data_present = 1;
+            else:
+                data_present = 0;
+                return render(request,"main.html",{'title':'main','data':'','data_present':data_present,'department_id':department_id})
+            
+            #semseter = additionalInfo.semseter
+            return render(request,"main.html",{'title':'main','data':data,'data_present':data_present,'department_id':department_id})
         else:
-            data_present = 0;
-        return render(request,"main.html",{'title':'main','data':data,'data_present':data_present})
+            messages.error(request,"Enter the details to continue.")
+            return redirect('edit')
+            
+        
+        #return render(request,"main.html",{'title':'main','data':data,'data_present':data_present})
+        #return render(request,"main.html")
+    else:
+        messages.error(request,"Login to continue.")
+        return redirect('login')
+
+def rank(request,department_id,semester,subject_name):
+    if(request.user.is_authenticated):
+        if(request.method == "GET"):  
+            additionalinfo = additionalInfo.objects.get(user_id=request.user.id)  
+            if(additionalinfo.privacy == 0):
+                messages.error(request,"Enable privacy to public to rank yourself among other students.")
+                return redirect('main')
+
+
+            flag = 0
+            #TO delete: subject_name = subject_name
+
+            #Check if the mark in corresponding semester and subject name is present.
+            if(markDetails.objects.filter(subject_name=subject_name,semester=semester).exists()):
+                data = markDetails.objects.filter(subject_name=subject_name,semester=semester)
+
+                #Used to store the data only if the students belong in the same year.
+                filtered_data = []
+
+                for datum in data:
+                    #Find the user of the data
+                    this_datum_user_id = datum.user_id
+
+                    #Find additional info of the user
+                    this_datum_additional_info = additionalInfo.objects.filter(user_id=this_datum_user_id).first()
+
+                    #Check if the user is the same year(by using the cureent semester.)
+                    this_datum_user_current_semester = this_datum_additional_info.current_semester_id
+
+                    #Check if the user is same department.
+                    this_datum_user_department_id = this_datum_additional_info.Department_id
+
+                    #Check if the user account of current data is private or public.
+                    this_datum_user_privacy = this_datum_additional_info.privacy
+
+                    if(this_datum_user_id == request.user.id or (this_datum_user_privacy == 1 and this_datum_user_current_semester == semester and this_datum_user_department_id == department_id) ):
+                        print("appended")
+                        flag = 1
+
+                        #Find username of this data to print.
+                        current_datum_username = User.objects.get(id=this_datum_user_id)
+                        prepared_data = {'username': current_datum_username,'department_id':this_datum_user_department_id,'marks':datum.marks }
+
+                        filtered_data.append(prepared_data)
+                    
+                    #Remove it
+                    #this_datum_privacy = this_datum_additional_info.privacy 
+                    #if(additionalInfo.objects.get(user_id=this_datum_user_id).Department_id == department_id):
+                if(flag == 0):
+                    messages.error(request,"No specific data is found.")  
+                    return redirect('main')    
+
+            else:
+                messages.error(request,"No records of marks found")
+                return redirect('main')
+            return render(request,"rank.html",{'semester':semester,'subject_name':subject_name,'data':filtered_data})
+        else:
+            messages.error(request,"Only Get request will be handled.")
+            return render(request,'NotFound.html')
     else:
         messages.error(request,"Login to continue.")
         return redirect('login')
@@ -93,23 +169,6 @@ def edit_marks(request,id):
     else:
         messages.error(request,"Only get method request will be handled.")
         return render(request,"NotFound")
-
-def edit_marks_post(request,id):
-    if(request.method == "POST"):
-        dataToBeEdited = markDetails.objects.get(id=id)
-        form = MarkForms(request.POST,instance=dataToBeEdited)
-        if(forms.is_valid()):
-            form.save()
-            messages.success('Marks updated.')
-            return redirect('main')
-        else:
-            messages.error(request,"Inform form data.")
-            return redirect("edit_marks")
-    else:
-        messages.error(request,"Only post methods will be handled.")
-        return redirect("edit_marks.html")
-    
-
 
 def add(request):
     if(request.method == 'GET'):

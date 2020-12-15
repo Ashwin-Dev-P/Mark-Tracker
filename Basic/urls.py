@@ -13,6 +13,7 @@ urlpatterns=[
     path('notFound',views.notFound,name="Not Found"),
     path('delete/<int:id>',views.delete,name="delete"),
     path('edit_marks/<int:id>',views.edit_marks,name="edit_marks"),
+    path('rank/<int:department_id>/<int:semester>/<str:subject_name>',views.rank,name="rank"),
     
     
 
